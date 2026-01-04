@@ -25,7 +25,7 @@ export function meta({}: Route.MetaArgs) {
 }
 
 const styles = {
-  root: "min-h-screen bg-gray-50",
+  root: "min-h-screen",
   container: "container mx-auto px-4 py-16",
   header: "text-center mb-12",
   title: "text-4xl font-bold text-gray-900 mb-4",
@@ -93,7 +93,7 @@ export default function ArticlesIndex({ loaderData }: Route.ComponentProps) {
                 <CardHeader className={styles.cardHeader}>
                   <div className={styles.metaRow}>
                     <time dateTime={article.publishedAt}>
-                      {article.publishedAt 
+                      {article.publishedAt
                         ? new Date(article.publishedAt).toLocaleDateString(
                             "en-US",
                             {
@@ -114,11 +114,7 @@ export default function ArticlesIndex({ loaderData }: Route.ComponentProps) {
                 </CardContent>
 
                 <CardFooter className={styles.cardFooter}>
-                  <Button
-                    variant="ghost"
-                    className={styles.readMoreBtn}
-                    asChild
-                  >
+                  <Button asChild>
                     <Link to={`/articles/${article.slug}`}>
                       Read more
                       <svg

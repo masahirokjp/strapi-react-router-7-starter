@@ -1,7 +1,11 @@
-import type { TAuthor, TImage } from "../../types"
+import type { TAuthor, TImage } from "../../types";
 import { Link } from "react-router";
 import { MarkdownContent } from "./Markdown";
 import { StrapiImage } from "./StrapiImage";
+import { Avatar, AvatarImage, AvatarFallback } from "~/components/ui/avatar";
+import { Card } from "~/components/ui/card";
+
+import { getStrapiMedia } from "~/lib/utils";
 
 export interface IArticleDetail {
   documentId: string;
@@ -26,7 +30,7 @@ import {
 } from "../ui/breadcrumb";
 
 const styles = {
-  root: "min-h-screen bg-background",
+  root: "min-h-screen",
   headerWrapper: "bg-card",
   headerContainer: "container mx-auto px-4 py-8",
   headerInner: "max-w-4xl mx-auto",
@@ -38,7 +42,7 @@ const styles = {
 
   bodyContainer: "container mx-auto px-4 py-4",
   bodyInner: "max-w-4xl mx-auto",
-  contentCard: "bg-white rounded-lg shadow-sm p-8 lg:p-12",
+  contentCard: "rounded-lg p-8 lg:p-12",
 
   authorWrapper: "mt-6 flex items-start space-x-6",
   authorImageWrapper: "w-16 h-16 flex-shrink-0",
@@ -84,9 +88,7 @@ export function ArticleDetail(props: IArticleDetail) {
                 <StrapiImage
                   src={featuredImage.url}
                   alt={
-                    featuredImage.alternativeText ||
-                    title ||
-                    "Article image"
+                    featuredImage.alternativeText || title || "Article image"
                   }
                   aspectRatio="16:9"
                   className={styles.featuredImage}
@@ -99,23 +101,24 @@ export function ArticleDetail(props: IArticleDetail) {
 
       <div className={styles.bodyContainer}>
         <div className={styles.bodyInner}>
-          <div className={styles.contentCard}>
+          <Card className={styles.contentCard}>
             <MarkdownContent content={content} />
 
             {author?.fullName && (
               <div className={styles.authorWrapper}>
-                {author.image?.url && (
-                  <div className={styles.authorImageWrapper}>
-                    <StrapiImage
-                      src={author.image.url}
-                      alt={author.image.alternativeText || author.fullName}
-                      aspectRatio="square"
-                      className={styles.authorImage}
-                      width={64}
-                      height={64}
-                    />
-                  </div>
-                )}
+                <Avatar className="w-16 h-16">
+                  <AvatarImage
+                    src={author.image?.url ? getStrapiMedia(author.image.url) : undefined}
+                    alt={author.image?.alternativeText || author.fullName}
+                  />
+                  <AvatarFallback>
+                    {author.fullName
+                      ?.split(" ")
+                      .map((name) => name[0])
+                      .join("")
+                      .slice(0, 2)}
+                  </AvatarFallback>
+                </Avatar>
                 <div>
                   <h3 className={styles.authorName}>About {author.fullName}</h3>
                   {author.bio && (
@@ -124,7 +127,7 @@ export function ArticleDetail(props: IArticleDetail) {
                 </div>
               </div>
             )}
-          </div>
+          </Card>
         </div>
       </div>
     </div>
